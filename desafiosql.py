@@ -164,20 +164,24 @@ class CuentasdeBancoCH:
               with connection.cursor(dictionary=True) as cursor:
                   cursor.execute('SELECT * FORM cliente WHERE DNI = %s', (dni))
                   cliente_data = cursor.fetchone()
-
+                  
                   if cliente_data:
                       cursor.execute('SELECT titular_de_la_cuenta FROM CuentaBancariaCorriente WHERE dni = %s', (dni))
                       cliente = cursor.fetchone()
 
                       if cliente: 
-                          cliente_data['Titular de la Cuenta'] = cliente['Titular de la Cuenta']
+                          cliente_data['Titular de la Cuenta: '] = cliente['Titular de la Cuenta']
                           cliente = CuentaBancariaCorriente(**cliente_data)
                       else:
                           cursor.execute('SELECT Cliente FROM CuentaBancariaAhorro WHERE dni = %s', (dni))
                           cliente = cursor.fetchone()
-                  print(f'Cliente encontrado: {cliente}')       
-          else:
-              print(f'No se encontro titular de la cuenta con el DNI: {dni}')
+                          if cliente:
+                              cliente_data['Titular de la Cuenta: '] = cliente['Titular de la Cuenta: ']
+                              cliente_data = CuentaBancariaAhorro(**cliente_data)
+                          else:
+                              cliente_data = CuentaBancaria(**cliente_data)
+                  else:
+                      print(f'Titular encontrado con DNI {dni}.')
 
         except Error as e:
             print(f'Error al leer datos del archivo: {e}')
@@ -200,8 +204,9 @@ class CuentasdeBancoCH:
          try:
             connection = self.connect()
             if connection:
-                with connection.cursor() as cursor:                  
-                    cursor.execute('SELECT DNI FROM cliente WHERE DNI = %s', (cliente.dni,))
+                with connection.cursor(dictionary=True) as cursor:                  
+                    cursor.execute('SELECT DNI FROM cliente WHERE DNI = %s', (cliente.dni))
+
                     if cursor.fetchone():
                         print(f'Error ya existe un cliente con DNI {cliente.dni}')
                         return
@@ -241,4 +246,3 @@ class CuentasdeBancoCH:
 
     def buscar_cliente(self, dni):
           return self.datos.get(dni, "Cliente no encontrado") 
-   

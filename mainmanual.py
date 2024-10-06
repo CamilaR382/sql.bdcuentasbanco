@@ -37,7 +37,6 @@ def crear_cuenta(titular_de_la_cuenta, dni):
  except Exception as e:
   print('Error: {e}')
 
-
 def cuenta_bancaria_corriente(titular_de_la_cuenta, dni):
  try:
     titular_de_la_cuenta = input("Ingrese el nombre del titular: ")
