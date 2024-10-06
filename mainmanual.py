@@ -105,6 +105,7 @@ def transferir_saldo(monto, cuenta_origen, cuenta_destino):
 mostrar_menu()
 opcion = input('Seleccione una opcion: ')
 
+
 def main():
   if __name__ == "__main__":
     cuenta = CuentasdeBancoCH()
