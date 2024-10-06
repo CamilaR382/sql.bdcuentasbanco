@@ -4,6 +4,7 @@ from mysql.connector import Error
 from decouple import config
 
 
+
 class CuentaBancaria :
    def __init__(self, titular_de_la_cuenta, numero_de_cuenta, dni, monto) :
        self.titular_de_la_cuenta = titular_de_la_cuenta
